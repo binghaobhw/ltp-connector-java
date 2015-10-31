@@ -65,16 +65,16 @@ public class Word {
         return args;
     }
 
-    @Override
-    public String toString() {
-        return "Word{id=" + id + ", cont='" + cont + "', pos='" + pos + "', ne='" + ne + "', parent=" + parent + ", relate='" + relate + "', args=" + args + '}';
-    }
-
     public boolean isStopWord() {
         return stopWord;
     }
 
     public void setStopWord(boolean stopWord) {
         this.stopWord = stopWord;
+    }
+
+    @Override
+    public String toString() {
+        return "Word{id=" + id + ", cont='" + cont + "', pos='" + pos + "', ne='" + ne + "', parent=" + parent + ", relate='" + relate + "', args=" + args + ", stopWord=" + stopWord + '}';
     }
 }

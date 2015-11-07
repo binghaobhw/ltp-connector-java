@@ -2,6 +2,8 @@ package cn.edu.hit.ir.ltp.result
 
 import spock.lang.Specification
 
+import java.util.function.Predicate
+
 
 class LtpResultTest extends Specification {
     LtpResult ltpResult
@@ -24,6 +26,11 @@ class LtpResultTest extends Specification {
                         new Word(1, '！', 'wp', 'O', 0, 'WP', [])
                 ]),
         ])])
+    }
+
+    def 'get punctuations'() {
+        expect:
+        ltpResult.filter({it.pos == 'wp'} as Predicate).size() == 2
     }
 
     def "get words"() {

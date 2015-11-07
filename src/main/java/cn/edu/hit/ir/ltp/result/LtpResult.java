@@ -3,7 +3,9 @@ package cn.edu.hit.ir.ltp.result;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @XmlRootElement(name = "doc")
 public class LtpResult {
@@ -21,15 +23,19 @@ public class LtpResult {
     }
 
     public List<Word> getWords() {
-        List<Word> words = new ArrayList<>();
+        List<Word> words = new LinkedList<>();
         paras.forEach(p -> p.getSents().forEach(s -> words.addAll(s.getWords())));
         return words;
     }
 
     public List<Word> getNonStopWords() {
-        List<Word> nonStopWords = new ArrayList<>();
-        paras.forEach(p -> p.getSents().forEach(s -> s.getWords().stream().filter(w -> !w.isStopWord()).forEach(nonStopWords::add)));
-        return nonStopWords;
+        return filter(word -> !word.isStopWord());
+    }
+
+    public List<Word> filter(Predicate<Word> predicate) {
+        List<Word> result = new LinkedList<>();
+        paras.forEach(p -> p.getSents().forEach(s -> s.getWords().stream().filter(predicate).forEach(result::add)));
+        return result;
     }
 
     public List<Sent> getSents() {

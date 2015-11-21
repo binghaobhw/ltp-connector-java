@@ -5,7 +5,7 @@ import cn.edu.hit.ir.ltp.result.LtpResult;
 public class LtmlMapperImpl extends XmlMapper implements LtmlMapper {
 
     private boolean isLtml(String response) {
-        return response.contains("<xml4nlp>");
+        return response.contains("<xml4nlp>") && response.contains("<doc>");
     }
 
     private String extractDocPart(String ltml) {

@@ -10,7 +10,7 @@ public class LtmlMapperImpl extends XmlMapper implements LtmlMapper {
 
     private String extractDocPart(String ltml) {
         return "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" +
-                ltml.substring(ltml.indexOf("<doc>") - 5, ltml.lastIndexOf("</xml4nlp>"));
+                ltml.substring(ltml.indexOf("<doc>"), ltml.lastIndexOf("</xml4nlp>"));
     }
 
     @Override

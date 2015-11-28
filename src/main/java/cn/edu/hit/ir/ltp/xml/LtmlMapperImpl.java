@@ -1,24 +1,40 @@
 package cn.edu.hit.ir.ltp.xml;
 
 import cn.edu.hit.ir.ltp.result.LtpResult;
+import org.eclipse.persistence.jaxb.JAXBContextFactory;
 
-public class LtmlMapperImpl extends XmlMapper implements LtmlMapper {
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.StringReader;
+import java.io.StringWriter;
 
-    private boolean isLtml(String response) {
-        return response.contains("<xml4nlp>") && response.contains("<doc>");
-    }
+public class LtmlMapperImpl implements LtmlMapper {
+    private final Unmarshaller unmarshaller;
+    private final Marshaller marshaller;
 
-    private String extractDocPart(String ltml) {
-        return "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" +
-                ltml.substring(ltml.indexOf("<doc>"), ltml.lastIndexOf("</xml4nlp>"));
+    public LtmlMapperImpl() {
+        try {
+            JAXBContext jaxbContext = JAXBContextFactory.createContext(new Class[]{LtpResult.class}, null);
+            unmarshaller = jaxbContext.createUnmarshaller();
+            marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, "utf-8");
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        } catch (JAXBException e) {
+            throw new RuntimeException("Fail to initialize", e);
+        }
     }
 
     @Override
-    public LtpResult unmarshal(String xml) throws Exception {
-        if (!isLtml(xml)) {
-            throw new Exception("Invalid LTML format");
-        }
-        String doc = extractDocPart(xml);
-        return unmarshal(LtpResult.class, doc);
+    public LtpResult unmarshal(String ltml) throws Exception {
+        return (LtpResult) unmarshaller.unmarshal(new StringReader(ltml));
+    }
+
+    @Override
+    public String marshal(LtpResult ltpResult) throws Exception {
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(ltpResult, writer);
+        return writer.toString();
     }
 }

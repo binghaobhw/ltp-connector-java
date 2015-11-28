@@ -1,9 +1,7 @@
 package cn.edu.hit.ir.ltp.result;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "arg")
 public class Arg {
     @XmlAttribute
     private int id;

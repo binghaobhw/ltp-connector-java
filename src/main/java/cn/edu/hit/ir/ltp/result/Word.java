@@ -1,80 +1,71 @@
 package cn.edu.hit.ir.ltp.result;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
 
-@XmlRootElement(name = "word")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Word {
     @XmlAttribute
-    private int id;
+    public int id;
     @XmlAttribute
-    private String cont;
+    public String cont;
     @XmlAttribute
-    private String pos;
+    public String pos;
     @XmlAttribute
-    private String ne;
+    public String ne;
     @XmlAttribute
-    private int parent;
+    public Integer parent;
     @XmlAttribute
-    private String relate;
+    public String relate;
+    @XmlAttribute(name = "semparent")
+    public Integer semParent;
+    @XmlAttribute(name = "semrelate")
+    public String semRelate;
     @XmlElement(name = "arg")
-    private List<Arg> args;
+    public List<Arg> args;
 
-    private boolean stopWord = false;
+    @XmlTransient
+    public boolean stopWord = false;
 
-    private Word() {
+    private Word() {}
+
+    public Word(int id, String cont) {
+        this(id, cont, null, null, null, null, null, null, null);
     }
 
-    public Word(int id, String cont, String pos, String ne, int parent, String relate, List<Arg> args) {
+    public Word(int id, String cont, String pos) {
+        this(id, cont, pos, null, null, null, null, null, null);
+    }
+
+    public Word(int id, String cont, String pos, String ne, Integer parent, String relate, Integer semParent, String semRelate, List<Arg> args) {
         this.id = id;
         this.cont = cont;
         this.pos = pos;
         this.ne = ne;
         this.parent = parent;
         this.relate = relate;
+        this.semParent = semParent;
+        this.semRelate = semRelate;
         this.args = args;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getCont() {
-        return cont;
-    }
-
-    public String getPos() {
-        return pos;
-    }
-
-    public String getNe() {
-        return ne;
-    }
-
-    public int getParent() {
-        return parent;
-    }
-
-    public String getRelate() {
-        return relate;
-    }
-
-    public List<Arg> getArgs() {
-        return args;
-    }
-
-    public boolean isStopWord() {
-        return stopWord;
-    }
-
-    public void setStopWord(boolean stopWord) {
-        this.stopWord = stopWord;
     }
 
     @Override
     public String toString() {
-        return "Word{id=" + id + ", cont='" + cont + "', pos='" + pos + "', ne='" + ne + "', parent=" + parent + ", relate='" + relate + "', args=" + args + ", stopWord=" + stopWord + '}';
+        return "Word{" +
+                "id=" + id +
+                ", cont='" + cont + '\'' +
+                ", pos='" + pos + '\'' +
+                ", ne='" + ne + '\'' +
+                ", parent=" + parent +
+                ", relate='" + relate + '\'' +
+                ", semParent=" + semParent +
+                ", semRelate='" + semRelate + '\'' +
+                ", args=" + args +
+                ", stopWord=" + stopWord +
+                '}';
     }
 }

@@ -32,8 +32,8 @@ dependencies {
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
 
-project.ext.username = project.getProperty('username')
-project.ext.apikey = project.getProperty('apikey')
+project.ext.username = project.hasProperty('username') ? project.getProperty('username') : ''
+project.ext.apikey = project.hasProperty('apikey') ? project.getProperty('apikey') : ''
 
 publishing {
     repositories {

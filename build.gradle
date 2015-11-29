@@ -1,8 +1,18 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.4"
+}
+
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -11,7 +21,7 @@ group = 'cn.edu.hit.ir'
 version = '0.1.0-SNAPSHOT'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -22,15 +32,61 @@ dependencies {
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
 
+project.ext.username = project.getProperty('username')
+project.ext.apikey = project.getProperty('apikey')
+
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username project.ext.username
+                password project.ext.apikey
+
+            }
+            url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'cn.edu.hit.ir'
+            artifactId 'ltp-connector-java'
+            version '0.1.0-SNAPSHOT'
+
+            from components.java
+
+            artifact sourceJar
+        }
+    }
+}
+
+bintray {
+    user = project.ext.username
+    key = project.ext.apikey
+    publications = ['mavenJava']
+    pkg {
+        repo = 'maven'
+        name = 'ltp-connector-java'
+        userOrg = project.ext.username
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/scorpio147wbh/ltp-connector-java.git'
+        publicDownloadNumbers = true
+        version {
+            name = '0.1.0-SNAPSHOT'
+            desc = 'LTP Connector Java'
+        }
+    }
+}
+
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.7'
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+task sourceJar(type: Jar, dependsOn: classes) {
     classifier 'sources'
     from sourceSets.main.allSource
 }
 
 artifacts {
-    archives sourcesJar
+    archives sourceJar
 }

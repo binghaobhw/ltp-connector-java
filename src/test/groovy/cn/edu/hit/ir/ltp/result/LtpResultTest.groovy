@@ -50,4 +50,19 @@ class LtpResultTest extends Specification {
         expect:
         ltpResult.getSents().size() == 2
     }
+
+    def 'get cont'() {
+        expect:
+        ltpResult.getCont() == '我们都是中国人。你好！'
+    }
+
+    def 'get non-stop cont'() {
+        given:
+        ltpResult.paras[0].sents[0].words[1].stopWord = true
+        ltpResult.paras[0].sents[0].words[2].stopWord = true
+        ltpResult.paras[0].sents[1].words[1].stopWord = true
+
+        expect:
+        ltpResult.getNonStopWordCont() == '我们中国人。你好'
+    }
 }

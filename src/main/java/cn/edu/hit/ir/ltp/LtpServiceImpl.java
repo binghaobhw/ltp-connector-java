@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LtpServiceImpl implements LtpService {
-    private final String url;
-    private final HttpClient httpClient;
-    private final LtmlMapper ltmlMapper;
+    protected final String url;
+    protected final HttpClient httpClient;
+    protected final LtmlMapper ltmlMapper;
 
     public LtpServiceImpl(String url, HttpClient httpClient, LtmlMapper ltmlMapper) {
         this.url = url;
@@ -20,11 +20,30 @@ public class LtpServiceImpl implements LtpService {
 
     @Override
     public LtpResult analyze(String text) throws Exception {
+        return invoke(fields(text, Task.ALL, false));
+    }
+
+    @Override
+    public LtpResult analyze(String text, Task task) throws Exception {
+        return invoke(fields(text, task, false));
+    }
+
+    @Override
+    public LtpResult analyze(LtpResult source, Task task) throws Exception {
+        String ltml = ltmlMapper.marshal(source);
+        return invoke(fields(ltml, task, true));
+    }
+
+    protected Map<String, Object> fields(String text, Task task, boolean xmlInput) {
         Map<String, Object> fields = new HashMap<>();
-        fields.put("x", "n");
-        fields.put("t", "all");
         fields.put("s", text);
-        String response = httpClient.post(url, fields);
-        return ltmlMapper.unmarshal(response);
+        fields.put("t", task);
+        fields.put("x", xmlInput ? "y" : "n");
+        return fields;
+    }
+
+    private LtpResult invoke(Map<String, Object> fields) throws Exception {
+        String ltml = httpClient.post(url, fields);
+        return ltmlMapper.unmarshal(ltml);
     }
 }

@@ -27,9 +27,11 @@ repositories {
 dependencies {
     compile 'com.mashape.unirest:unirest-java:1.4.7'
     compile 'org.eclipse.persistence:org.eclipse.persistence.moxy:2.6.1'
+    compile 'org.slf4j:slf4j-api:1.7.13'
 
     testCompile 'org.codehaus.groovy:groovy-all:2.4.5'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'org.slf4j:slf4j-simple:1.7.13'
 }
 
 project.ext.username = project.hasProperty('username') ? project.getProperty('username') : ''

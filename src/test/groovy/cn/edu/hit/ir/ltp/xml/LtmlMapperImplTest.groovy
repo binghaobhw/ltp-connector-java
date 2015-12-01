@@ -96,11 +96,8 @@ class LtmlMapperImplTest extends Specification {
                         new Word(3, '中国'),
                         new Word(4, '人'),
                         new Word(5, '。')])])])
-        ltpResult.tasks.pos = false
-        ltpResult.tasks.ne = false
-        ltpResult.tasks.parser = false
-        ltpResult.tasks.srl = false
-        ltpResult.tasks.semparser = false
+        ltpResult.tasks.sent = true
+        ltpResult.tasks.word = true
 
         when:
         String result = ltmlMapper.marshal(ltpResult)
@@ -124,6 +121,13 @@ class LtmlMapperImplTest extends Specification {
                         new Word(3, '中国', 'ns', 'S-Ns', 4, 'ATT', 4, 'Nmod', []),
                         new Word(4, '人', 'n', 'O', 2, 'VOB', 2, 'Clas', []),
                         new Word(5, '。', 'wp', 'O', 2, 'WP', 2, 'mPunc', [])])])])
+        ltpResult.tasks.sent = true
+        ltpResult.tasks.word = true
+        ltpResult.tasks.pos = true
+        ltpResult.tasks.ne = true
+        ltpResult.tasks.parser = true
+        ltpResult.tasks.semparser = true
+        ltpResult.tasks.srl = true
 
         when:
         String result = ltmlMapper.marshal(ltpResult)

@@ -2,6 +2,8 @@ package cn.edu.hit.ir.ltp.xml;
 
 import cn.edu.hit.ir.ltp.result.LtpResult;
 import org.eclipse.persistence.jaxb.JAXBContextFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -11,6 +13,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 public class LtmlMapperImpl implements LtmlMapper {
+    private static final Logger logger = LoggerFactory.getLogger(LtmlMapperImpl.class);
     private final Unmarshaller unmarshaller;
     private final Marshaller marshaller;
 
@@ -28,6 +31,7 @@ public class LtmlMapperImpl implements LtmlMapper {
 
     @Override
     public LtpResult unmarshal(String ltml) throws Exception {
+        logger.debug("Unmarshal, ltml='{}'", ltml);
         return (LtpResult) unmarshaller.unmarshal(new StringReader(ltml));
     }
 
@@ -35,6 +39,8 @@ public class LtmlMapperImpl implements LtmlMapper {
     public String marshal(LtpResult ltpResult) throws Exception {
         StringWriter writer = new StringWriter();
         marshaller.marshal(ltpResult, writer);
-        return writer.toString();
+        String ltml = writer.toString();
+        logger.debug("Marshal, ltml='{}'", ltml);
+        return ltml;
     }
 }

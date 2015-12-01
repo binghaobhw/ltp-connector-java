@@ -8,39 +8,30 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Tasks {
     @XmlAttribute
     @XmlJavaTypeAdapter(TaskAdapter.class)
-    public boolean sent;
+    public boolean sent = false;
     @XmlAttribute
     @XmlJavaTypeAdapter(TaskAdapter.class)
-    public boolean word;
+    public boolean word = false;
     @XmlAttribute
     @XmlJavaTypeAdapter(TaskAdapter.class)
-    public boolean pos;
+    public boolean pos = false;
     @XmlAttribute
     @XmlJavaTypeAdapter(TaskAdapter.class)
-    public boolean ne;
+    public boolean ne = false;
     @XmlAttribute
     @XmlJavaTypeAdapter(TaskAdapter.class)
-    public boolean parser;
+    public boolean parser = false;
     @XmlAttribute
     @XmlJavaTypeAdapter(TaskAdapter.class)
-    public boolean semparser;
+    public boolean semparser = false;
     @XmlAttribute
     @XmlJavaTypeAdapter(TaskAdapter.class)
-    public boolean wsd;
+    public boolean wsd = false;
     @XmlAttribute
     @XmlJavaTypeAdapter(TaskAdapter.class)
-    public boolean srl;
+    public boolean srl = false;
 
-    public Tasks() {
-        sent = true;
-        word = true;
-        pos = true;
-        ne = true;
-        parser = true;
-        semparser = true;
-        wsd = false;
-        srl = true;
-    }
+    public Tasks() {}
 
     @Override
     public String toString() {

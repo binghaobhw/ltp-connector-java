@@ -3,7 +3,7 @@ package cn.edu.hit.ir.ltp;
 public enum Task {
     WS("ws"),
     POS("pos"),
-    NER("ner"),
+    NE("ne"),
     DP("dp"),
     SDP("sdp"),
     SRL("srl"),

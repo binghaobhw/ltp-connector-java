@@ -1,8 +1,10 @@
 package cn.edu.hit.ir.ltp;
 
 import cn.edu.hit.ir.ltp.http.HttpClient;
+import cn.edu.hit.ir.ltp.http.HttpClientImpl;
 import cn.edu.hit.ir.ltp.result.LtpResult;
 import cn.edu.hit.ir.ltp.xml.LtmlMapper;
+import cn.edu.hit.ir.ltp.xml.LtmlMapperImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,10 @@ public class LtpServiceImpl implements LtpService {
     protected final HttpClient httpClient;
     protected final LtmlMapper ltmlMapper;
 
+    public LtpServiceImpl(String url) {
+        this(url, new HttpClientImpl(), new LtmlMapperImpl());
+    }
+
     public LtpServiceImpl(String url, HttpClient httpClient, LtmlMapper ltmlMapper) {
         this.url = url;
         this.httpClient = httpClient;
@@ -19,19 +25,28 @@ public class LtpServiceImpl implements LtpService {
     }
 
     @Override
-    public LtpResult analyze(String text) throws Exception {
-        return invoke(fields(text, Task.ALL, false));
+    public LtpResult analyze(String text, Task... tasks) throws Exception {
+        checkTasks(tasks);
+        String ltml = invoke(text, tasks[0], false);
+        for (int i = 1; i < tasks.length; i++) {
+            ltml = invoke(ltml, tasks[i], true);
+        }
+        return ltmlMapper.unmarshal(ltml);
     }
 
     @Override
-    public LtpResult analyze(String text, Task task) throws Exception {
-        return invoke(fields(text, task, false));
-    }
-
-    @Override
-    public LtpResult analyze(LtpResult source, Task task) throws Exception {
+    public LtpResult furtherAnalyze(LtpResult source, Task... tasks) throws Exception {
+        checkTasks(tasks);
         String ltml = ltmlMapper.marshal(source);
-        return invoke(fields(ltml, task, true));
+        for (Task task : tasks) {
+            ltml = invoke(ltml, task, true);
+        }
+        return ltmlMapper.unmarshal(ltml);
+    }
+
+    private String invoke(String text, Task task, boolean xmlInput) throws Exception {
+        Map<String, Object> fields = fields(text, task, xmlInput);
+        return httpClient.post(url, fields);
     }
 
     protected Map<String, Object> fields(String text, Task task, boolean xmlInput) {
@@ -42,8 +57,14 @@ public class LtpServiceImpl implements LtpService {
         return fields;
     }
 
-    private LtpResult invoke(Map<String, Object> fields) throws Exception {
-        String ltml = httpClient.post(url, fields);
-        return ltmlMapper.unmarshal(ltml);
+    private static void checkTasks(Task... tasks) {
+        if (tasks == null || tasks.length == 0) {
+            throw new IllegalArgumentException("tasks must be non-null or emtpy");
+        }
+        for (Task task : tasks) {
+            if (task == null) {
+                throw new IllegalArgumentException("task cannot be null");
+            }
+        }
     }
 }

@@ -9,6 +9,11 @@ import java.util.Map;
 public class LtpCloudService extends LtpServiceImpl {
     private final String apiKey;
 
+    public LtpCloudService(String url, String apiKey) {
+        super(url);
+        this.apiKey = apiKey;
+    }
+
     public LtpCloudService(String url, String apiKey, HttpClient httpClient, LtmlMapper ltmlMapper) {
         super(url, httpClient, ltmlMapper);
         this.apiKey = apiKey;
@@ -19,7 +24,8 @@ public class LtpCloudService extends LtpServiceImpl {
         Map<String, Object> fields = new HashMap<>();
         fields.put("api_key", apiKey);
         fields.put("text", text);
-        fields.put("pattern", task);
+        // 'ner' in ltp cloud but 'ne' in ltp server
+        fields.put("pattern", (task == Task.NE) ? "ner" : task);
         fields.put("format", "xml");
         fields.put("xml_input", xmlInput ? "y" : "n");
         return fields;

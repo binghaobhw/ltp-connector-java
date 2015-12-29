@@ -1,23 +1,18 @@
 package cn.edu.hit.ir.ltp
 
-import cn.edu.hit.ir.ltp.http.HttpClientImpl
-import cn.edu.hit.ir.ltp.xml.LtmlMapperImpl
 import spock.lang.Specification
 
 class LtpCloudServiceTest extends Specification {
-    LtpService ltpService
-    def setup() {
-        ltpService = new LtpCloudService(
-                'http://api.ltp-cloud.com/analysis/',
-                'u1Q1k8U6tglHca7ZZJ6qTBaq2k0QYwyXNqyE3kVu',
-                new HttpClientImpl(),
-                new LtmlMapperImpl()
-        )
-    }
+    def ltpService = new LtpCloudService('http://api.ltp-cloud.com/analysis/',
+            'u1Q1k8U6tglHca7ZZJ6qTBaq2k0QYwyXNqyE3kVu')
 
     def "analyze task all"() {
-        expect:
-        ltpService.analyze('我是中国人').words.size() == 4
+        when:
+        def r = ltpService.analyze('我是中国人', Task.ALL)
+
+        then:
+        r.tasks.sent && r.tasks.word && r.tasks.pos && r.tasks.parser && r.tasks.ne
+        r.tasks.semparser && r.tasks.srl
     }
 
     def 'analyze task ws'() {

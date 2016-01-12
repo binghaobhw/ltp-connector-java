@@ -70,6 +70,13 @@ public class LtpResult implements Operations {
     }
 
     @Override
+    public List<String> getNamedEntities() {
+        List<String> nes = new ArrayList<>();
+        paras.forEach(para -> nes.addAll(para.getNamedEntities()));
+        return nes;
+    }
+
+    @Override
     public String toString() {
         return "LtpResult{" +
                 "tasks=" + tasks +

@@ -65,4 +65,9 @@ class LtpResultTest extends Specification {
         expect:
         ltpResult.getNonStopWordCont() == '我们中国人。你好'
     }
+
+    def 'get named entity'() {
+        expect:
+        ltpResult.getNamedEntities() == ['中国']
+    }
 }

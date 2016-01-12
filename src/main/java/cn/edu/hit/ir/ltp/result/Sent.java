@@ -2,6 +2,7 @@ package cn.edu.hit.ir.ltp.result;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -52,6 +53,24 @@ public class Sent implements Operations {
             }
         });
         return builder.toString();
+    }
+
+    @Override
+    public List<String> getNamedEntities() {
+        List<String> nes = new ArrayList<>();
+        StringBuilder ne = new StringBuilder();
+        boolean previousB = false;
+        for (Word word : words) {
+            if (word.ne.startsWith("B") || word.ne.startsWith("I") || word.ne.startsWith("E") || word.ne.startsWith("S")) {
+                ne.append(word.cont);
+                previousB = word.ne.startsWith("B");
+            }
+            if (word.ne.startsWith("E") || word.ne.startsWith("S") || previousB) {
+                nes.add(ne.toString());
+                ne = new StringBuilder();
+            }
+        }
+        return nes;
     }
 
     @Override

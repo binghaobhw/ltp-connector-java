@@ -52,6 +52,13 @@ public class Para implements Operations {
     }
 
     @Override
+    public List<String> getNamedEntities() {
+        List<String> nes = new ArrayList<>();
+        sents.forEach(sent -> nes.addAll(sent.getNamedEntities()));
+        return nes;
+    }
+
+    @Override
     public String toString() {
         return "Para{" +
                 "id=" + id +

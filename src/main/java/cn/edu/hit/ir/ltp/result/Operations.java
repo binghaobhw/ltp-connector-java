@@ -10,4 +10,5 @@ public interface Operations {
     List<Word> getNonStopWords();
     String getCont();
     String getNonStopWordCont();
+    List<String> getNamedEntities();
 }

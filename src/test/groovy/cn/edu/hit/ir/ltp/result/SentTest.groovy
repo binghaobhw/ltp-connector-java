@@ -30,4 +30,22 @@ class SentTest extends Specification {
         then:
         nes == ['哈尔滨']
     }
+    def "named entities for '哈尔滨工业大学'"() {
+        given:
+        def words = [
+                new Word(0, '哈尔滨'),
+                new Word(1, '工业'),
+                new Word(2, '大学'),
+        ]
+        words[0].ne = 'B-Ni'
+        words[1].ne = 'I-Ni'
+        words[2].ne = 'E-Ni'
+        def sent = new Sent(0, '哈尔滨工业大学', words)
+
+        when:
+        def nes = sent.getNamedEntities()
+
+        then:
+        nes == ['哈尔滨工业大学']
+    }
 }

@@ -61,14 +61,21 @@ public class Sent implements Operations {
         StringBuilder ne = new StringBuilder();
         boolean previousB = false;
         for (Word word : words) {
-            if (word.ne.startsWith("B") || word.ne.startsWith("I") || word.ne.startsWith("E") || word.ne.startsWith("S")) {
-                ne.append(word.cont);
-                previousB = word.ne.startsWith("B");
-            }
-            if (word.ne.startsWith("E") || word.ne.startsWith("S") || previousB) {
+            if (previousB && !word.ne.startsWith("I") && !word.ne.startsWith("E")) {
                 nes.add(ne.toString());
                 ne = new StringBuilder();
             }
+            if (!word.ne.equals("O")) {
+                ne.append(word.cont);
+                previousB = word.ne.startsWith("B");
+                if (word.ne.startsWith("E") || word.ne.startsWith("S")) {
+                    nes.add(ne.toString());
+                    ne = new StringBuilder();
+                }
+            }
+        }
+        if (previousB) {
+            nes.add(ne.toString());
         }
         return nes;
     }

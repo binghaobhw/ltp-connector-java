@@ -9,7 +9,7 @@ import cn.edu.hit.ir.ltp.xml.LtmlMapperImpl;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LtpServiceImpl implements LtpService {
+public class LtpServiceImpl extends BaseLtpService {
     protected final String url;
     protected final HttpClient httpClient;
     protected final LtmlMapper ltmlMapper;

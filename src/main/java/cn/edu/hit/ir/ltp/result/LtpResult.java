@@ -23,8 +23,12 @@ public class LtpResult implements Operations {
     private LtpResult() {}
 
     public LtpResult(List<Para> paras) {
+        this(paras, new Tasks());
+    }
+
+    public LtpResult(List<Para> paras, Tasks tasks) {
         this.paras = paras;
-        tasks = new Tasks();
+        this.tasks = tasks;
     }
 
     public List<Word> getWords() {

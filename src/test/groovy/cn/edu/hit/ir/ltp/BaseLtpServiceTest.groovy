@@ -1,11 +1,7 @@
 package cn.edu.hit.ir.ltp
 
-import cn.edu.hit.ir.ltp.result.LtpResult
-import cn.edu.hit.ir.ltp.result.Para
-import cn.edu.hit.ir.ltp.result.Sent
-import cn.edu.hit.ir.ltp.result.Word
+import cn.edu.hit.ir.ltp.result.*
 import spock.lang.Specification
-
 
 class BaseLtpServiceTest extends Specification {
     def "test removeLineBreaker"() {
@@ -37,10 +33,13 @@ aaa\n\nb
 
     def 'test divideIntoLtpResult'() {
         given:
+        def tasks = new Tasks()
+        tasks.sent = true
+        tasks.word = true
         def all = new LtpResult([
                 new Para(0, [new Sent(0, 'a', [new Word(0, 'a')])]),
                 new Para(1, [new Sent(0, 'b', [new Word(0, 'b')])])
-        ])
+        ], tasks)
 
         when:
         def result = BaseLtpService.divideIntoLtpResult(all)
@@ -53,5 +52,7 @@ aaa\n\nb
         result[0].paras[0].sents[0].cont == 'a'
         result[1].paras[0].sents.size() == 1
         result[1].paras[0].sents[0].cont == 'b'
+        result[0].tasks.sent && result[0].tasks.word
+        result[1].tasks.sent && result[1].tasks.word
     }
 }

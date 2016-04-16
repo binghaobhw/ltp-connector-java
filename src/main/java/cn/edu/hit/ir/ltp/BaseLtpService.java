@@ -28,7 +28,7 @@ public abstract class BaseLtpService implements LtpService {
         return all.paras.stream().map(p -> {
             List<Para> paras = new ArrayList<>(1);
             paras.add(new Para(0, p.sents));
-            return new LtpResult(paras);
+            return new LtpResult(paras, all.tasks);
         }).collect(Collectors.toList());
     }
 }

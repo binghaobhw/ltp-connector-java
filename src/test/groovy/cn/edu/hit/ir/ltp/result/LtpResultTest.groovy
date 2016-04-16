@@ -28,6 +28,23 @@ class LtpResultTest extends Specification {
         ])])
     }
 
+    def 'test copy'() {
+        given:
+        ltpResult.paras[0].sents[0].words[5].stopWord = true
+        ltpResult.paras[0].sents[1].words[1].stopWord = true
+        ltpResult.tasks.sent = true
+        ltpResult.tasks.word = true
+
+        when:
+        def copy = LtpResult.copy(ltpResult)
+        copy.paras[0].sents[0].words[5].stopWord = false
+
+        then:
+        ltpResult.paras[0].sents[0].words[5].stopWord
+        !copy.paras[0].sents[0].words[5].stopWord
+        copy.tasks.sent && copy.tasks.word
+    }
+
     def 'get punctuations'() {
         expect:
         ltpResult.filter({it.pos == 'wp'} as Predicate).size() == 2

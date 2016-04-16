@@ -33,6 +33,26 @@ public class LtpResult implements Operations {
         return words;
     }
 
+    public static LtpResult copy(LtpResult source) {
+        List<Para> paras = new ArrayList<>(source.paras.size());
+        for (Para para : source.paras) {
+            List<Sent> sents = new ArrayList<>(para.sents.size());
+            for (Sent sent : para.sents) {
+                List<Word> words = new ArrayList<>(sent.words.size());
+                for (Word word : sent.words) {
+                    Word w = new Word(word.id, word.cont, word.pos, word.ne, word.parent, word.relate, word.semParent, word.semRelate, word.args);
+                    w.stopWord = word.stopWord;
+                    words.add(w);
+                }
+                sents.add(new Sent(sent.id, sent.cont, words));
+            }
+            paras.add(new Para(para.id, sents));
+        }
+        LtpResult copied = new LtpResult(paras);
+        copied.tasks = source.tasks;
+        return copied;
+    }
+
     @Override
     public List<Word> getNonStopWords() {
         return filter(word -> !word.stopWord);

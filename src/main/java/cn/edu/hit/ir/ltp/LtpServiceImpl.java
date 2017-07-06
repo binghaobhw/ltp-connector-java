@@ -53,6 +53,7 @@ public class LtpServiceImpl extends BaseLtpService {
         Map<String, Object> fields = new HashMap<>();
         fields.put("s", text);
         fields.put("t", task);
+        fields.put("f", "xml");
         fields.put("x", xmlInput ? "y" : "n");
         return fields;
     }
